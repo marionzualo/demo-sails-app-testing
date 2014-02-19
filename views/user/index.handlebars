@@ -1,0 +1,59 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testing Sails - Index</title>
+    <link rel="stylesheet" href="styles/foundation.css" />
+    <script src="js/vendor/modernizr.js"></script>
+  </head>
+  <body>
+    <h1>Sign up Form </h1>
+    <form id="formulario" action="/user/create">
+      <div id="errorMessage" style="display:none;">
+        <h2>O preenchimento de todos os campos é obrigatório</h2>
+      </div>
+      <div class="row">
+        <div class="large-12 columns">
+          <label> Name
+            <input type="text" id="name" name="name" placeholder="Enter your full name." />
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-12 columns">
+          <label> E-mail
+            <input type="text" id="email" name="email" placeholder="Enter your e-mail address." />
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-12 columns">
+          <label> Password
+            <input type="text" id="password" name="password" placeholder="Enter your password." />
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <a href="#" id="submitButton" class="button" onclick="validaCampos()">Submit</a>
+      </div>
+    </form>  
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script src="js/validateForm.js"></script>
+    <script>
+      $(document).foundation();
+
+      function validaCampos(){
+        var name = $('#name').val();
+        var email = $('#email').val();
+        var password = $('#password').val();
+        var form = $('#formulario');
+        var error = $('#errorMessage');
+
+        validateForm(name, email, password, form, error);
+      }
+
+    </script>
+  </body>
+</html>
