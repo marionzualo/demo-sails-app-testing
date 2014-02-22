@@ -3,6 +3,7 @@ var should = require('chai').should(),
 	assert = require('chai').assert,
 	barrels = require('barrels'),
 	sinon = require('sinon'),
+	request = require('supertest'),
 	fixtures;
 
 describe('UserController ', function(){
@@ -39,69 +40,46 @@ describe('UserController ', function(){
 	});
 
 	it('should redirect to route homepage if user exists', function(done){
-
+		//form parameters
 		var allParams = {
 			name: 'McIntosh',
 			email: 'mail@test.com',
 			password: 'test'
 		};
 
-		var req = {
-			params : {
-				//Stub will simulate the behavior of request by returning all input parameters
-				all : sinon.stub()
+		//access to the endpoint of the controller
+		request(Sails.express.app).post('/user/create').send(allParams).end(function(err, res) {
+			if (err) {
+				throw err;
 			}
-		};
 
-		req.params.all.returns(allParams);
+			//asses if it was routed to the correct page
+			var pageURL = res.header.location;
+			pageURL.should.equal('/');
 
-		var res = {
-			//Spy that will allow us to assess if redirect was called and its argument
-			redirect: sinon.spy()
-		};
-
-		var next = {};
-
-		Sails.controllers.user.create(req, res, function(){
-			//checking if the correct URL was chosen
-			res.redirect.calledOnce.should.be.true;
-			res.redirect.calledWith('/').should.be.true;
-			//done is called to tell mocha to end the tests since it is async code
+			//done needs to be called since it is an async test
 			done();
 		});
 	});
 
 	it('shoudl redirect to route success page if user does not exist', function(done){
+		
 		var allParams = {
 			name: 'Test master',
 			email: 'info@test2.com',
 			password: 'test2'
 		};
 
-		var req = {
-			params : {
-				//stub that allows us to get all the parameters from the request
-				all : sinon.stub()
-			},
-			session: {
-				User : sinon.spy()
+		request(Sails.express.app).post('/user/create').send(allParams).end(function(err, res) {
+			if (err) {
+				throw err;
 			}
-		};
+			
+			//asses if it was routed to the correct page
+			var pageURL = res.header.location;
+			pageURL.should.equal('/success');
 
-		req.params.all.returns(allParams);
-
-		var res = {
-			//Spy that will allow us to assess if redirect was called and its argument
-			redirect: sinon.spy()
-		};
-
-		var next = {};
-
-		Sails.controllers.user.create(req, res, function(){
-			//checking if the correct URL was chosen
-			res.redirect.calledOnce.should.be.true;
-			res.redirect.calledWith('/success').should.be.true;
-			//done is called to tell mocha to end the tests since it is async code
+			//done needs to be called since it is an async test
 			done();
 		});
 	});
@@ -115,7 +93,7 @@ describe('UserController ', function(){
 			Sails.adapters['sails-mongo'].destroy(modelName, options, cb);
 		});
 
-		sails.lower();
+		Sails.lower();
 		done();
 	});
 });
@@ -124,7 +102,8 @@ describe('UserController ', function(){
 // - Before the tests: lift the server (to call the controller), populate the tests DB (barrels - first test)
 // - After the test: lower the server, clean the tests DB so we can rerun without problems (some records were inserted)
 // - testDB != dev DB but a similar DB should be used
-// Stub for request, spy for response, done and async code
+// Supertest is used to allow us to test HTTP request to the controller endpoint
+// More complicated tests could be made: cookies, HTTP response codes, content-type, etc
 
 
 //Turn on the DB: mongod --port 3089

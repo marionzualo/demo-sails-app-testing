@@ -35,7 +35,7 @@ Sails.lift({
 	    var testOptions = {
 	    	tests: __dirname + '/tests/testium.createUser.test.js',
 	    	applicationPort: 5050,
-	    	browser: 'phantomjs'
+	    	browser: 'chrome'
 		};
 
 		testium.run(testOptions, function (error, exitCode){

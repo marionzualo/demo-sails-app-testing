@@ -97,5 +97,12 @@ after(function (done) {
 	});
 });
 
+// Integration tests:
+// - Before the tests: lift the server (to call the controller), populate the tests DB (barrels - first test)
+// - After the test: lower the server, clean the tests DB so we can rerun without problems (some records were inserted)
+// - testDB != dev DB but a similar DB should be used
 
+
+//Turn on the DB: mongod --port 3089
+//Run the tests: mocha --ui bdd test/integration/models.User.test.js
 

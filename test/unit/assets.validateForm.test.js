@@ -39,7 +39,7 @@ describe('New User Form', function(){
 
 		var errorSpy = sinon.spy();
 		var error = {
-			attr : errorSpy
+			css : errorSpy
 		};
 
 		var name = 'Test name';
